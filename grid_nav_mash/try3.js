@@ -1,3 +1,5 @@
+import { Astar } from "./Astar";
+import { Node } from "./Astar";
 const canvas = goap_game;
 console.log(canvas);
 canvas.width = "600";
@@ -60,68 +62,8 @@ function isBlocked(cordinate) {
     ),
   );
 }
-class Node {
-  constructor(x, y, g, h, parent) {
-    ((this.x = x),
-      (this.y = y),
-      (this.g = 0), //cost to move to this tile
-      (this.h = 0), //distance from here to target
-      (this.f = g + h),
-      (this.parent = parent || null));
-  }
-}
 
-function Astar(startNode, target) {
-  const open = [startNode];
-  const closedHashes = new Set(); // Use hashes to track visited coords
 
-  while (open.length > 0) {
-    // 1. Find lowest F cost
-    let currentIndex = 0;
-    for (let i = 0; i < open.length; i++) {
-      if (open[i].f < open[currentIndex].f) currentIndex = i;
-    }
-
-    let current = open[currentIndex];
-    let currentHash = hashIndex(current.x, current.y);
-
-    // 2. Check Target
-    if (current.x === target.x && current.y === target.y) {
-      return BuildPath(current);
-    }
-
-    // 3. Move from Open to Closed
-    open.splice(currentIndex, 1);
-    closedHashes.add(currentHash);
-
-    // 4. Process Neighbors
-    const directions = [
-      [0, 1],
-      [0, -1],
-      [1, 0],
-      [-1, 0],
-    ];
-
-    for (let [dx, dy] of directions) {
-      let nx = current.x + dx;
-      let ny = current.y + dy;
-      let nHash = hashIndex(nx, ny);
-
-      if (isBlocked({ x: nx, y: ny }) || closedHashes.has(nHash)) continue;
-
-      let gScore = current.g + 1; // Cumulative cost
-      let hScore = calculateDistance(target, { x: nx, y: ny });
-      let neighbor = new Node(nx, ny, gScore, hScore, current);
-
-      // Check if neighbor is already in open with a better path
-      let existingOpen = open.find((n) => n.x === nx && n.y === ny);
-      if (existingOpen && gScore >= existingOpen.g) continue;
-
-      if (!existingOpen) open.push(neighbor);
-    }
-  }
-  return []; // No path found
-}
 function BuildPath(current) {
   let path = [];
   while (current != null) {
@@ -336,44 +278,44 @@ enemy.draw();
 
 window.addEventListener("keydown", (e) => enemy.move(20, e.code));
 
-let player = null;
-window.addEventListener("mousedown", (estart) => {
-  if (isBlocked({ x: estart.clientX, y: estart.clientY })) {
-    return;
-  }
-  target_coordinate = { x: estart.clientX, y: estart.clientY };
-  player = new Game_object(target_coordinate.x, target_coordinate.y, ctx);
-  player.draw();
+// let player = null;
+// window.addEventListener("mousedown", (estart) => {
+//   if (isBlocked({ x: estart.clientX, y: estart.clientY })) {
+//     return;
+//   }
+//   target_coordinate = { x: estart.clientX, y: estart.clientY };
+//   player = new Game_object(target_coordinate.x, target_coordinate.y, ctx);
+//   player.draw();
 
-  const path = Astar(
-    new Node(
-      enemy.posX,
-      enemy.posY,
-      0,
-      calculateDistance(target_coordinate, { x: enemy.posX, y: enemy.posY }),
-    ),
-    target_coordinate,
-  );
+//   const path = Astar(
+//     new Node(
+//       enemy.posX,
+//       enemy.posY,
+//       0,
+//       calculateDistance(target_coordinate, { x: enemy.posX, y: enemy.posY }),
+//     ),
+//     target_coordinate,
+//   );
 
-  if (!path) return; // Safety check
+//   if (!path) return; // Safety check
 
-  // 3. Clear existing movement
-  if (window.myInterval) clearInterval(window.myInterval);
+//   // 3. Clear existing movement
+//   if (window.myInterval) clearInterval(window.myInterval);
 
-  // 4. Move at a human-readable speed (e.g., every 100ms)
-  window.myInterval = setInterval(() => {
-    if (path.length === 0) {
-      clearInterval(window.myInterval);
-      return;
-    }
+//   // 4. Move at a human-readable speed (e.g., every 100ms)
+//   window.myInterval = setInterval(() => {
+//     if (path.length === 0) {
+//       clearInterval(window.myInterval);
+//       return;
+//     }
 
-    // Get next tile and convert BACK to pixels for the drawing engine
-    let nextTile = path.pop();
-    // enemy.posX = nextTile.x * CELL_SIZE;
-    // enemy.posY = nextTile.y * CELL_SIZE;
+//     // Get next tile and convert BACK to pixels for the drawing engine
+//     let nextTile = path.pop();
+//     // enemy.posX = nextTile.x * CELL_SIZE;
+//     // enemy.posY = nextTile.y * CELL_SIZE;
 
-    enemy.moveToCoordinate(nextTile.x, nextTile.y);
-    // Trigger your draw/render function here
-    // requestAnimationFrame(renderLoop);
-  }, 10);
-});
+//     enemy.moveToCoordinate(nextTile.x, nextTile.y);
+//     // Trigger your draw/render function here
+//     // requestAnimationFrame(renderLoop);
+//   }, 10);
+// });
