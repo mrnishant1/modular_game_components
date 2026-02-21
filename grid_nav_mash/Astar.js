@@ -60,3 +60,12 @@ export function Astar(startNode, target) {
   }
   return []; // No path found
 }
+
+function BuildPath(current) {
+  let path = [];
+  while (current != null) {
+    path.push({ x: current.x, y: current.y });
+    current = current.parent;
+  }
+  return path;
+}

@@ -64,14 +64,7 @@ function isBlocked(cordinate) {
 }
 
 
-function BuildPath(current) {
-  let path = [];
-  while (current != null) {
-    path.push({ x: current.x, y: current.y });
-    current = current.parent;
-  }
-  return path;
-}
+
 
 class Create_Obstacle {
   constructor(ctx, CELL_SIZE) {
