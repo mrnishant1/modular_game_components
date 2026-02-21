@@ -1,5 +1,3 @@
-import { Astar } from "./Astar";
-import { Node } from "./Astar";
 const canvas = goap_game;
 console.log(canvas);
 canvas.width = "600";
@@ -13,39 +11,6 @@ let target_coordinate = { x: 500, y: 500 };
 let shapes_cords = [];
 let myInterval = null;
 
-// function Astar(x, y) {
-//   const coordinates = [
-//     { x: x - 1, y },
-//     { x, y: y - 1 },
-//     { x: x + 1, y },
-//     { x, y: y + 1 },
-//   ];
-
-//   let minCoordinate = null;
-//   let minCost = Infinity;
-
-//   let cords =[]
-//   coordinates.forEach((c) => {
-//     if (isBlocked({ x: c.x, y: c.y })) {
-//       return
-//     };
-
-//     const g = isBlocked({ x: c.x, y: c.y })?Infinity:1;
-//     const h = calculateDistance(target_coordinate, c);
-//     const f = g + h;
-
-//     if (f < minCost) {
-//       minCost = f;
-//       minCoordinate = { ...c };
-//     }
-//   });
-
-//   if (minCoordinate) {
-//     enemy.moveToCoordinate(minCoordinate.x, minCoordinate.y);
-//   } else {
-//     console.log(minCoordinate);
-//   }
-// }
 function calculateDistance(target, current) {
   let distance =
     Math.abs(target.x - current.x) + Math.abs(target.y - current.y);
@@ -270,45 +235,3 @@ const enemy = new Game_object(0, 0, ctx);
 enemy.draw();
 
 window.addEventListener("keydown", (e) => enemy.move(20, e.code));
-
-// let player = null;
-// window.addEventListener("mousedown", (estart) => {
-//   if (isBlocked({ x: estart.clientX, y: estart.clientY })) {
-//     return;
-//   }
-//   target_coordinate = { x: estart.clientX, y: estart.clientY };
-//   player = new Game_object(target_coordinate.x, target_coordinate.y, ctx);
-//   player.draw();
-
-//   const path = Astar(
-//     new Node(
-//       enemy.posX,
-//       enemy.posY,
-//       0,
-//       calculateDistance(target_coordinate, { x: enemy.posX, y: enemy.posY }),
-//     ),
-//     target_coordinate,
-//   );
-
-//   if (!path) return; // Safety check
-
-//   // 3. Clear existing movement
-//   if (window.myInterval) clearInterval(window.myInterval);
-
-//   // 4. Move at a human-readable speed (e.g., every 100ms)
-//   window.myInterval = setInterval(() => {
-//     if (path.length === 0) {
-//       clearInterval(window.myInterval);
-//       return;
-//     }
-
-//     // Get next tile and convert BACK to pixels for the drawing engine
-//     let nextTile = path.pop();
-//     // enemy.posX = nextTile.x * CELL_SIZE;
-//     // enemy.posY = nextTile.y * CELL_SIZE;
-
-//     enemy.moveToCoordinate(nextTile.x, nextTile.y);
-//     // Trigger your draw/render function here
-//     // requestAnimationFrame(renderLoop);
-//   }, 10);
-// });
