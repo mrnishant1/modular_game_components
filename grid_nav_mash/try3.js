@@ -213,7 +213,7 @@ function redraw(preview = null) {
     body.RigidBody(x1, y1, x2 - x1, y2 - y1);
   });
   enemy.draw();
-  player.draw();
+  // player.draw();
 
   // draw preview if exists
   if (preview) {
